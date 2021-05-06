@@ -94,6 +94,19 @@ def create_owner():
         if(cursor):
             cursor.close()
 
+@app.route('/api/owners/', methods=['GET'])
+def list_owners():
+    # Use RealDictCursor to convert DB records into Dict objects
+    cursor = connection.cursor(cursor_factory=RealDictCursor)
+
+    postgreSQL_select_Query = "SELECT * FROM owners"
+    # execute query
+    cursor.execute(postgreSQL_select_Query)
+    # Selecting rows from mobile table using cursor.fetchall
+    owners = cursor.fetchall()
+    # respond, status 200 is added for us
+    return jsonify(owners)
+
 @app.route('/api/pets/', methods=['PUT'])
 def checkedin():
     print('request.json is a dict!', request.json)
