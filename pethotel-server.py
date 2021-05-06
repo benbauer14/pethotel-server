@@ -139,28 +139,28 @@ def checkedin():
             cursor.close()
 
 # Delete PET
-@app.route('/api/pets/', methods=['DELETE'])
+@app.route('/api/delete/', methods=['POST'])
 def deletePet():
     print('request.json is a dict!', request.json)
     print('if you\'re using multipart/form data, use request.form instead!', request.form)
-    print(request.json)
-    id = request.json['id']
+
     try:
         # Avoid getting arrays of arrays!
+        id = request.json['id']
         cursor = connection.cursor(cursor_factory=RealDictCursor)
         insertQuery = 'DELETE FROM pets WHERE "id"=%s'
         # if only only one param, still needs to be a tuple --> cursor.execute(insertQuery, (title,)) <-- comma matters!
-        cursor.execute(insertQuery, ( id ))
+        cursor.execute(insertQuery, ( id, ))
         # really for sure commit the query
         connection.commit()
         count = cursor.rowcount
-        print(count, "DELETED")
+        print(count, "Pet Deleted")
         # respond nicely
-        result = {'status': 'UPDATED'}
+        result = {'status': 'DELETED'}
         return jsonify(result), 201
     except (Exception, psycopg2.Error) as error:
         # there was a problem
-        print("Failed to delete", error)
+        print("Failed to add owner", error)
         # respond with error
         result = {'status': 'ERROR'}
         return jsonify(result), 500
