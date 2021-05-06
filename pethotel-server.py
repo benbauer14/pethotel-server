@@ -16,17 +16,21 @@ connection = psycopg2.connect(
 def create_pet():
     print('request.json is a dict!', request.json)
     print('if you\'re using multipart/form data, use request.form instead!', request.form)
-    petname = request.form['petname']
+    print(request.form)
+    pet = request.form['pet']
     owner = request.form['owner']
+    breed = request.form['breed']
+    color = request.form['color']
+    checkedin = request.form['checkedin']
 
     try:
         # Avoid getting arrays of arrays!
         cursor = connection.cursor(cursor_factory=RealDictCursor)
 
-        print(petname, owner)
-        insertQuery = "INSERT INTO pets (petname, owner) VALUES (%s, %s)"
+        print(pet, owner)
+        insertQuery = "INSERT INTO pets (pet, owner, breed, color, checkedin) VALUES (%s, %s, %s, %s,%s)"
         # if only only one param, still needs to be a tuple --> cursor.execute(insertQuery, (title,)) <-- comma matters!
-        cursor.execute(insertQuery, (petname, owner))
+        cursor.execute(insertQuery, (pet, owner, breed, color, checkedin))
         # really for sure commit the query
         connection.commit()
         count = cursor.rowcount

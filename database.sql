@@ -2,8 +2,11 @@ database: pethotel
 
 CREATE TABLE pets (
     id SERIAL PRIMARY KEY,
-    petname text,
-    owner text
+    pet text,
+    breed text,
+    color text,
+    checkedin boolean,
+    owner integer REFERENCES owners(id)
 );
 
 CREATE TABLE owners (
