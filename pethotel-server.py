@@ -139,12 +139,12 @@ def checkedin():
             cursor.close()
 
 # Delete PET
-@app.route('/api/pets/', methods=['DELETE'])
-def deletePet():
+@app.route('/api/pets/:id', methods=['DELETE'])
+def deletePet( id ):
     print('request.json is a dict!', request.json)
     print('if you\'re using multipart/form data, use request.form instead!', request.form)
     print(request.json)
-    id = request.json['id']
+    # id = request.json['id']
     try:
         # Avoid getting arrays of arrays!
         cursor = connection.cursor(cursor_factory=RealDictCursor)
