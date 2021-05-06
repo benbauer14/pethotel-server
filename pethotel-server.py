@@ -94,4 +94,36 @@ def create_owner():
         if(cursor):
             cursor.close()
 
+@app.route('/api/pets/', methods=['PUT'])
+def checkedin():
+    print('request.json is a dict!', request.json)
+    print('if you\'re using multipart/form data, use request.form instead!', request.form)
+    print(request.json)
+    id = request.json['id']
+    checkedin = request.json['checkedin']
+    try:
+        # Avoid getting arrays of arrays!
+        cursor = connection.cursor(cursor_factory=RealDictCursor)
+        print( 'owner:', name )
+        insertQuery = 'UPDATE pets SET "checkedin"=%s WHERE "id"=%s'
+        # if only only one param, still needs to be a tuple --> cursor.execute(insertQuery, (title,)) <-- comma matters!
+        cursor.execute(insertQuery, ( checkedin, id ))
+        # really for sure commit the query
+        connection.commit()
+        count = cursor.rowcount
+        print(count, "CHECKEDIN updated")
+        # respond nicely
+        result = {'status': 'UPDATED'}
+        return jsonify(result), 201
+    except (Exception, psycopg2.Error) as error:
+        # there was a problem
+        print("Failed to update", error)
+        # respond with error
+        result = {'status': 'ERROR'}
+        return jsonify(result), 500
+    finally:
+        # clean up our cursor
+        if(cursor):
+            cursor.close()
+
 app.run()
