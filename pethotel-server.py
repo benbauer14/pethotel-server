@@ -54,7 +54,7 @@ def list_pets():
     # Use RealDictCursor to convert DB records into Dict objects
     cursor = connection.cursor(cursor_factory=RealDictCursor)
 
-    postgreSQL_select_Query = "SELECT * FROM pets"
+    postgreSQL_select_Query = "SELECT pets.id, owners.name, pets.pet, pets.breed, pets.color, pets.checkedin FROM pets JOIN owners ON pets.owner = owners.id ORDER BY pets.id"
     # execute query
     cursor.execute(postgreSQL_select_Query)
     # Selecting rows from mobile table using cursor.fetchall
