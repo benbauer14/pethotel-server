@@ -99,7 +99,8 @@ def list_owners():
     # Use RealDictCursor to convert DB records into Dict objects
     cursor = connection.cursor(cursor_factory=RealDictCursor)
 
-    postgreSQL_select_Query = "SELECT * FROM owners"
+    postgreSQL_select_Query = "SELECT owners.id, owners.name, COUNT(pets.pet) FROM owners LEFT JOIN pets ON owners.id = pets.owner GROUP BY owners.name, owners.id ORDER BY owners.id"
+
     # execute query
     cursor.execute(postgreSQL_select_Query)
     # Selecting rows from mobile table using cursor.fetchall

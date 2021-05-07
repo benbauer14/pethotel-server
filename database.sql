@@ -13,3 +13,7 @@ CREATE TABLE owners (
     id SERIAL PRIMARY KEY,
     name text
 );
+
+SELECT owners.name, COUNT(*) FROM pets 
+JOIN owners ON pets.owner = owners.id
+GROUP BY owners.name
